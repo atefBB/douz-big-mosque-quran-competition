@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, FloatingLabel } from "flowbite-react";
+import { Button, FloatingLabel, Label, Select } from "flowbite-react";
 
 export function MainContent() {
   const [firstName, setFirstName] = useState("");
@@ -42,25 +42,16 @@ export function MainContent() {
             </div>
 
             <div className="col-span-full">
-              <label
-                htmlFor="level"
-                className="block text-right text-sm font-medium leading-6 text-gray-900"
-              >
-                المستوى
-              </label>
-              <div className="mt-2">
-                <select
-                  id="level"
-                  name="level"
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                >
-                  {levels.map((level, index) => (
-                    <option key={index} value={level}>
-                      {level}
-                    </option>
-                  ))}
-                </select>
+              <div className="mb-2 block">
+                <Label htmlFor="level" value="المستوى" />
               </div>
+              <Select id="level" required>
+                {levels.map((level, index) => (
+                  <option key={index} value={level}>
+                    {level}
+                  </option>
+                ))}
+              </Select>
             </div>
           </div>
           <div className="mt-6 flex items-center justify-center gap-x-6">
