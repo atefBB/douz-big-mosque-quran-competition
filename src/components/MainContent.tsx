@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Button, FloatingLabel } from "flowbite-react";
 
 export function MainContent() {
   const [firstName, setFirstName] = useState("");
@@ -20,59 +21,24 @@ export function MainContent() {
             سيتم تسجيل هذه المعلومات بقاعدة بيانات لسهولة الوصول إليها لاحقا
           </p>
           <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-            <div className="col-span-full">
-              <label
-                htmlFor="fitstName"
-                className="block text-right text-sm font-medium leading-6 text-gray-900"
-              >
-                الاسم
-              </label>
-              <div className="mt-2">
-                <input
-                  id="fitstName"
-                  name="fitstName"
-                  type="text"
-                  onChange={(event) => setFirstName(event.target.value)}
-                  placeholder="الاسم"
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                />
-              </div>
+            <div className="flex col-span-full">
+              <FloatingLabel
+                variant="standard"
+                label="الاسم"
+                onChange={(event) => setFirstName(event.target.value)}
+              />
+              <FloatingLabel
+                variant="standard"
+                label="اسم الأب"
+                onChange={(event) => setFatherName(event.target.value)}
+              />
             </div>
             <div className="col-span-full">
-              <label
-                htmlFor="fatherName"
-                className="block text-right text-sm font-medium leading-6 text-gray-900"
-              >
-                اسم الأب
-              </label>
-              <div className="mt-2">
-                <input
-                  id="fatherName"
-                  name="fatherName"
-                  type="text"
-                  onChange={(event) => setFatherName(event.target.value)}
-                  placeholder="اسم الأب"
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                />
-              </div>
-            </div>
-            <div className="col-span-full">
-              <label
-                htmlFor="lastName"
-                className="block text-right text-sm font-medium leading-6 text-gray-900"
-              >
-                اللقب
-              </label>
-              <div className="mt-2">
-                <input
-                  id="lastName"
-                  name="lastName"
-                  type="text"
-                  onChange={(event) => setLastName(event.target.value)}
-                  placeholder="اللقب"
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                />
-              </div>
+              <FloatingLabel
+                variant="standard"
+                label="اللقب"
+                onChange={(event) => setLastName(event.target.value)}
+              />
             </div>
 
             <div className="col-span-full">
@@ -98,16 +64,17 @@ export function MainContent() {
             </div>
           </div>
           <div className="mt-6 flex items-center justify-center gap-x-6">
-            <button
+            <Button
               type="submit"
               onClick={() => {
                 setFullName(`${firstName} بن ${fatherName} ${lastName}`);
                 alert(fullName);
               }}
-              className="w-full rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              color="blue"
+              className="w-full"
             >
               تسجيل
-            </button>
+            </Button>
           </div>
         </div>
       </div>
