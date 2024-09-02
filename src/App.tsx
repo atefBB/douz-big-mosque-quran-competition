@@ -1,5 +1,7 @@
 import { Header, MainContent, Footer } from "./components";
 
+import "./firebase";
+
 import "./app.css";
 
 export function App() {
