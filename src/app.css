@@ -163,3 +163,6 @@
     direction: rtl;
     font-family: "Amiri" !important;
 }
+body {
+    height: 100%;
+}
