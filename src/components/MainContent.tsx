@@ -1,14 +1,79 @@
 import { useState } from "react";
-import { Button, FloatingLabel, Label, Select } from "flowbite-react";
+import {
+  Button,
+  FloatingLabel,
+  Label,
+  Select,
+  Datepicker,
+} from "flowbite-react";
+import swal from "sweetalert";
+
+import { supabase } from "../supabase";
+
+type CompetitorType = {
+  firstName: string;
+  lastName: string;
+  fatherName: string;
+  level: string;
+  birthDate: Date | null;
+};
 
 export function MainContent() {
+  // @todo get levels from db
+  const levels = ["المستوى الأول", "المستوى الثاني", "المستوى الثالث"];
+
   const [firstName, setFirstName] = useState("");
   const [fatherName, setFatherName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [fullName, setFullName] = useState("");
+  const [birthDate, setBirthDate] = useState<Date | null>(null);
+  const [level, setLevel] = useState("");
+  const [isProcessing, setIsProcessing] = useState<boolean>(false);
 
-  // @todo get levels from db
-  const levels = ["المستوى الأول", "المستوى الثاني", "المستوى الثالث"];
+  async function saveData({
+    firstName,
+    lastName,
+    fatherName,
+    level,
+    birthDate,
+  }: CompetitorType) {
+    setIsProcessing(true);
+    // @todo validate inputs
+    const insertedData = [
+      {
+        firstname: firstName,
+        father_name: fatherName,
+        lastname: lastName,
+        // @todo add  `address`
+        level,
+        birth_date: birthDate,
+      },
+    ];
+    console.log({ insertedData });
+    const { data, error } = await supabase
+      .from("competitors")
+      .insert(insertedData)
+      .select();
+
+    setIsProcessing(false);
+
+    if (error !== null) {
+      return swal({
+        text: "حدث خطأ عند التسجيل، الرجاء المحاولة لاحقا.",
+        icon: "error",
+        buttons: [false],
+        timer: 2000,
+      });
+    }
+
+    if (data !== null) {
+      return swal({
+        text: "تم التسجيل بنجاح، سنتصل بك قريبا إن شا الله",
+        icon: "success",
+        buttons: [false],
+        timer: 2000,
+      });
+    }
+  }
 
   return (
     <main className="h-full my-10 mx-auto max-w-7xl px-6 lg:px-8">
@@ -43,9 +108,27 @@ export function MainContent() {
 
             <div className="col-span-full">
               <div className="mb-2 block">
+                <Label htmlFor="birthDate" value="تاريخ الولادة" />
+              </div>
+              <Datepicker
+                id="birthDate"
+                language="ar-TN"
+                labelTodayButton="اليوم"
+                labelClearButton="إغلاق"
+                maxDate={new Date()}
+                onSelectedDateChanged={(date) => setBirthDate(date)}
+              />
+            </div>
+
+            <div className="col-span-full">
+              <div className="mb-2 block">
                 <Label htmlFor="level" value="المستوى" />
               </div>
-              <Select id="level" required>
+              <Select
+                id="level"
+                required={true}
+                onChange={(event) => setLevel(event.target.value)}
+              >
                 {levels.map((level, index) => (
                   <option key={index} value={level}>
                     {level}
@@ -58,9 +141,15 @@ export function MainContent() {
             <Button
               type="submit"
               onClick={() => {
-                setFullName(`${firstName} بن ${fatherName} ${lastName}`);
-                alert(fullName);
+                saveData({
+                  firstName,
+                  lastName,
+                  fatherName,
+                  level,
+                  birthDate,
+                });
               }}
+              isProcessing={isProcessing}
               color="blue"
               className="w-full"
             >
