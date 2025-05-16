@@ -48,7 +48,7 @@ export function MainContent() {
         birth_date: birthDate,
       },
     ];
-    console.log({ insertedData });
+
     const { data, error } = await supabase
       .from("competitors")
       .insert(insertedData)
