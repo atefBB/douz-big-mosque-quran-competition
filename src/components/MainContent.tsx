@@ -19,8 +19,9 @@ type CompetitorType = {
 };
 
 export function MainContent() {
-  // @todo get levels from db
-  const levels = ["المستوى الأول", "المستوى الثاني", "المستوى الثالث"];
+  const [levels, setLevels] = useState<any[]>([]);
+  const [errorLevels, setErrorLevels] = useState<any>(null);
+  const [loadingLevels, setLoadingLevels] = useState<boolean>(true);
 
   const [firstName, setFirstName] = useState("");
   const [fatherName, setFatherName] = useState("");
@@ -75,6 +76,22 @@ export function MainContent() {
     }
   }
 
+  useEffect(() => {
+    const fetchLevels = async () => {
+      const { data, error } = await supabase.from("levels").select("*");
+
+      if (error) {
+        setErrorLevels(error);
+      } else {
+        setLevels(data);
+      }
+
+      setLoadingLevels(false);
+    };
+
+    fetchLevels();
+  }, []);
+
   return (
     <main className="h-full my-10 mx-auto max-w-7xl px-6 lg:px-8">
       <div className="bg-white border rounded px-5 shadow-xl hover:shadow-md mx-auto max-w-2xl">
@@ -124,17 +141,24 @@ export function MainContent() {
               <div className="mb-2 block">
                 <Label htmlFor="level" value="المستوى" />
               </div>
-              <Select
-                id="level"
-                required={true}
-                onChange={(event) => setLevel(event.target.value)}
-              >
-                {levels.map((level, index) => (
-                  <option key={index} value={level}>
-                    {level}
-                  </option>
-                ))}
-              </Select>
+              {loadingLevels === true ? (
+                "جار تحميل المستويات ..."
+              ) : errorLevels !== null ? (
+                errorLevels.message
+              ) : (
+                <Select
+                  id="level"
+                  required={true}
+                  value={level}
+                  onChange={(event) => setLevel(event.target.value)}
+                >
+                  {levels.map((level) => (
+                    <option key={level.id} value={level.name}>
+                      {level.name} ({level.description})
+                    </option>
+                  ))}
+                </Select>
+              )}
             </div>
           </div>
           <div className="mt-6 flex items-center justify-center gap-x-6">
